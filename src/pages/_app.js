@@ -1,6 +1,7 @@
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'
+import { useEffect } from 'react'
 
 // ** Loader Import
 import NProgress from 'nprogress'
@@ -21,7 +22,9 @@ import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsCo
 // ** Utils Imports
 import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'
 
-import { SessionProvider } from "next-auth/react"
+import { AuthContextProvider } from "../@core/context/AuthContext";
+import { CookieProvider } from "@reactivers/hooks";
+import ProtectedRoute from 'src/@core/components/protected-route/protectedroute'
 
 // ** React Perfect Scrollbar Style
 import 'react-perfect-scrollbar/dist/css/styles.css'
@@ -30,6 +33,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 import '../../styles/globals.css'
 
 const clientSideEmotionCache = createEmotionCache()
+
 
 // ** Pace Loader
 if (themeConfig.routingLoader) {
@@ -47,8 +51,7 @@ if (themeConfig.routingLoader) {
 // ** Configure JSS & ClassName
 const App = props => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps: { session, ...pageProps } } = props
-
-  console.log(session)
+  console.log('App component')
   // Variables
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
 
@@ -64,15 +67,26 @@ const App = props => {
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
 
-      <SessionProvider session={session}>
-        <SettingsProvider>
-          <SettingsConsumer>
-            {({ settings }) => {
-              return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
-            }}
-          </SettingsConsumer>
-        </SettingsProvider>
-      </SessionProvider>
+      {/* <SessionProvider session={session}> */}
+      <CookieProvider>
+        <AuthContextProvider>
+          <SettingsProvider>
+            <SettingsConsumer>
+              {({ settings }) => {
+                return <ThemeComponent settings={settings}>{getLayout(
+                  (Component.name !== 'LoginPage' ? <ProtectedRoute>
+                    <Component {...pageProps} />
+                  </ProtectedRoute> :
+
+                    <Component {...pageProps} />
+                  )
+                )}</ThemeComponent>
+              }}
+            </SettingsConsumer>
+          </SettingsProvider>
+        </AuthContextProvider>
+      </CookieProvider>
+      {/* </SessionProvider> */}
     </CacheProvider>
   )
 }

@@ -14,9 +14,13 @@ import DotsVertical from 'mdi-material-ui/DotsVertical'
 // ** Custom Components Imports
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
+import { useAuth } from "../../@core/context/AuthContext";
+
+
 const WeeklyOverview = () => {
   // ** Hook
   const theme = useTheme()
+  const { logOut } = useAuth();
 
   const options = {
     chart: {
@@ -101,7 +105,7 @@ const WeeklyOverview = () => {
           </Typography>
           <Typography variant='body2'>Your sales performance is 45% 😎 better compared to last month</Typography>
         </Box>
-        <Button fullWidth variant='contained'>
+        <Button fullWidth variant='contained' onClick={() => logOut() }>
           Details
         </Button>
       </CardContent>

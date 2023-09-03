@@ -1,7 +1,7 @@
 // ** React Imports
-import { useState } from 'react'
-import { signIn } from "next-auth/react";
-
+import { useState, useEffect } from 'react'
+import { signIn, useSession } from "next-auth/react";
+import { useAuth } from "../../../@core/context/AuthContext";
 
 // ** Next Imports
 import Link from 'next/link'
@@ -19,6 +19,7 @@ import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
+import { LoadingButton } from '@mui/lab';
 import { styled, useTheme } from '@mui/material/styles'
 import MuiCard from '@mui/material/Card'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -37,6 +38,8 @@ import themeConfig from 'src/configs/themeConfig'
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
+
+import NProgress from 'nprogress'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
@@ -67,9 +70,12 @@ const LoginPage = () => {
     showPassword: false
   })
 
+  const [loading, setLoading] = useState(false);
+
   // ** Hook
   const theme = useTheme()
   const router = useRouter()
+  const { logIn } = useAuth();
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
@@ -84,34 +90,33 @@ const LoginPage = () => {
   }
 
   const onSubmit = async (e) => {
+    NProgress.start();
     e.preventDefault();
     const callbackUrl = '/';
     try {
-      // setLoading(true);
-      setValues({ email: "", password: "" });
+      setLoading(true);
+      // setValues({ email: "", password: "" });
+      // const { user } = await logIn(values.email, values.password);
+      const user = await logIn(values.email, values.password);
+      if (!user) {
+        NProgress.done();
+        setLoading(false);
 
-      console.log(values)
-
-      const res = await signIn("credentials", {
-        redirect: false,
-        email: values.email,
-        password: values.password,
-        callbackUrl,
-      });
-
-      // setLoading(false);
-
-      console.log(res);
-      debugger
-      if (!res?.error) {
-        router.push(callbackUrl);
-      } else {
         router.push('/pages/error');
-
-        // setError("invalid email or password");
       }
+      else {
+        NProgress.done();
+        setLoading(false);
+        router.push(`/`);
+      }
+
     } catch (error) {
       // setLoading(false);
+      NProgress.done();
+      setLoading(false);
+
+
+      router.push('/pages/error');
       console.error(error)
       // setError(error);
     }
@@ -196,9 +201,9 @@ const LoginPage = () => {
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              Welcome to {themeConfig.templateName}! 👋🏻
+              Benvenuto in {themeConfig.templateName}! 👋🏻
             </Typography>
-            <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
+            <Typography variant='body2'>Effettua la login con le tue credenziali</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={onSubmit}>
             <TextField
@@ -239,17 +244,23 @@ const LoginPage = () => {
                 <LinkStyled onClick={e => e.preventDefault()}>Forgot Password?</LinkStyled>
               </Link>
             </Box>
-            <Button
+            {loading ? <LoadingButton
+              loading
+              loadingPosition='center'
               fullWidth
               size='large'
               variant='contained'
-              sx={{ marginBottom: 7 }}
-              // onClick={() => router.push('/')}
-              type='submit'
-            >
+              sx={{ marginBottom: 7 }} /> : <Button
+                fullWidth
+                size='large'
+                variant='contained'
+                sx={{ marginBottom: 7 }}
+                // onClick={() => router.push('/')}
+                type='submit'
+              >
               Login
-            </Button>
-            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+            </Button>}
+            {/* <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Typography variant='body2' sx={{ marginRight: 2 }}>
                 New on our platform?
               </Typography>
@@ -283,7 +294,7 @@ const LoginPage = () => {
                   <Google sx={{ color: '#db4437' }} />
                 </IconButton>
               </Link>
-            </Box>
+            </Box> */}
           </form>
         </CardContent>
       </Card>
