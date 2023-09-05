@@ -23,7 +23,6 @@ import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsCo
 import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'
 
 import { AuthContextProvider } from "../@core/context/AuthContext";
-import { CookieProvider } from "@reactivers/hooks";
 import ProtectedRoute from 'src/@core/components/protected-route/protectedroute'
 
 // ** React Perfect Scrollbar Style
@@ -51,7 +50,6 @@ if (themeConfig.routingLoader) {
 // ** Configure JSS & ClassName
 const App = props => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps: { session, ...pageProps } } = props
-  console.log('App component')
   // Variables
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
 
@@ -68,15 +66,15 @@ const App = props => {
       </Head>
 
       {/* <SessionProvider session={session}> */}
-      <CookieProvider>
         <AuthContextProvider>
           <SettingsProvider>
             <SettingsConsumer>
               {({ settings }) => {
                 return <ThemeComponent settings={settings}>{getLayout(
-                  (Component.name !== 'LoginPage' ? <ProtectedRoute>
-                    <Component {...pageProps} />
-                  </ProtectedRoute> :
+                  (Component.name !== 'LoginPage' ? 
+                  // <ProtectedRoute>
+                    <Component {...pageProps} /> :
+                  // </ProtectedRoute> :
 
                     <Component {...pageProps} />
                   )
@@ -85,7 +83,6 @@ const App = props => {
             </SettingsConsumer>
           </SettingsProvider>
         </AuthContextProvider>
-      </CookieProvider>
       {/* </SessionProvider> */}
     </CacheProvider>
   )

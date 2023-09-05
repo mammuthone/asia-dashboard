@@ -1,6 +1,5 @@
 // ** React Imports
 import { useState, useEffect } from 'react'
-import { signIn, useSession } from "next-auth/react";
 import { useAuth } from "../../../@core/context/AuthContext";
 
 // ** Next Imports

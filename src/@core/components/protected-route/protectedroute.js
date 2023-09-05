@@ -10,6 +10,7 @@ const ProtectedRoute = ({ children }) => {
   // const session_cookie = cookie.get('session');
   useEffect(() => {
     console.log('protected route. User :', user);
+    if (document.location.pathname.includes === '/pages/login') return;
     if (!user.uid) {
       router.push("/pages/login");
     }

@@ -1,9 +1,9 @@
-import { getAuth } from "firebase-admin/auth"; // Import getAuth from firebase-admin
-import { credential } from "firebase-admin"
-import { initializeApp } from "firebase-admin/app";
+import * as admin from "firebase-admin";
 
-const admin = initializeApp({
-    credential: credential.cert({
+if (!admin.apps.length) {
+  console.log("firebase admin init");
+  admin.initializeApp({
+    credential: admin.credential.cert({
       "type": "service_account",
       "project_id": "asia-395019",
       "private_key_id": "4664c719c8f3fdea78ced0c890fbcc39c25a0d7d",
@@ -17,7 +17,6 @@ const admin = initializeApp({
       "universe_domain": "googleapis.com"
     })
   });
-
-console.log("firebase admin init");
+}
 
 export default admin;

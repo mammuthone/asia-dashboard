@@ -26,20 +26,27 @@ const conf = {
 const admin = !getApps().length ? initializeApp(conf) : getApp()
 
 export default async function handler(req, res) {
-  const sessionCookie = req.cookies.session || '';
+  console.log('session Logout handler')
+  const sessionCookie = req.cookies["session"] || '';
   res.setHeader(
     "Set-Cookie",
     "session=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
   );
+
+  if (!sessionCookie) res.redirect('/pages/error');
   getAuth()
     .verifySessionCookie(sessionCookie)
-    .then((decodedClaims) => {
-      return getAuth().revokeRefreshTokens(decodedClaims.sub);
+    .then(async (decodedClaims) => {
+      console.log('revokeRefreshTokens')
+      await getAuth().revokeRefreshTokens(decodedClaims.sub);
     })
     .then(() => {
-      res.redirect('/pages/login');
+      console.log('then redirect to login')
+      res.redirect(307, '/pages/login');
     })
     .catch((error) => {
-      res.redirect('/pages//login');
+      console.error(error)
+      console.log('error then login')
+      res.redirect(500, '/pages/login')
     });
 }

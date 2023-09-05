@@ -26,7 +26,7 @@ const firebaseConfig = {
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth();
 
-console.log('firebase client init completed!')
+console.log('firebase client init completed! apps n. :', getApps().length);
 const provider = new GoogleAuthProvider();
 
 

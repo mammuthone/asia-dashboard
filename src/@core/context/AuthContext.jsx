@@ -64,10 +64,11 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const logOut = async () => {
-    console.log('log out...')
+    console.log('logging out...')
     setUser({ email: null, uid: null });
-    await signOut(auth);
-    const response = await fetch('/api/sessionLogout');
+    const response = await signOut(auth);
+    console.log(JSON.stringify(response));
+    return await fetch('/api/sessionLogout');
   };
 
   return (
