@@ -1,0 +1,321 @@
+{
+  "version": 3,
+  "routes": [
+    {
+      "src": "^(?:/((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/]+\\.\\w+))/$",
+      "headers": {
+        "Location": "/$1"
+      },
+      "status": 308,
+      "continue": true
+    },
+    {
+      "src": "^(?:/((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/\\.]+))$",
+      "headers": {
+        "Location": "/$1/"
+      },
+      "status": 308,
+      "continue": true
+    },
+    {
+      "src": "/_next/__private/trace",
+      "dest": "/404",
+      "status": 404,
+      "continue": true
+    },
+    {
+      "src": "/404/?",
+      "status": 404,
+      "continue": true,
+      "missing": [
+        {
+          "type": "header",
+          "key": "x-prerender-revalidate"
+        }
+      ]
+    },
+    {
+      "src": "/500",
+      "status": 500,
+      "continue": true
+    },
+    {
+      "src": "^/_next/data/FEK6Zlz44tY5CXIxUnKuG/(.*).json",
+      "dest": "/$1/",
+      "override": true,
+      "continue": true,
+      "has": [
+        {
+          "type": "header",
+          "key": "x-nextjs-data"
+        }
+      ]
+    },
+    {
+      "src": "^/index(?:/)?",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-nextjs-data"
+        }
+      ],
+      "dest": "/",
+      "override": true,
+      "continue": true
+    },
+    {
+      "continue": true,
+      "src": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?!api|_next\\/static|_next\\/image|favicon.ico|pages\\/login).*))(.json)?[\\/#\\?]?$",
+      "missing": [
+        {
+          "type": "header",
+          "key": "x-prerender-revalidate",
+          "value": "5c7199192842dcbe98481d72c2ba3b9a"
+        }
+      ],
+      "middlewarePath": "src/middleware",
+      "middlewareRawSrc": [],
+      "override": true
+    },
+    {
+      "src": "^/$",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-nextjs-data"
+        }
+      ],
+      "dest": "/_next/data/FEK6Zlz44tY5CXIxUnKuG/index.json",
+      "continue": true,
+      "override": true
+    },
+    {
+      "src": "^/((?!_next/)(?:.*[^/]|.*))/?$",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-nextjs-data"
+        }
+      ],
+      "dest": "/_next/data/FEK6Zlz44tY5CXIxUnKuG/$1.json",
+      "continue": true,
+      "override": true
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "^/_next/data/FEK6Zlz44tY5CXIxUnKuG/(.*).json",
+      "dest": "/$1/",
+      "continue": true,
+      "has": [
+        {
+          "type": "header",
+          "key": "x-nextjs-data"
+        }
+      ]
+    },
+    {
+      "src": "^/index(?:/)?",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-nextjs-data"
+        }
+      ],
+      "dest": "/",
+      "continue": true
+    },
+    {
+      "handle": "resource"
+    },
+    {
+      "src": "/.*",
+      "status": 404
+    },
+    {
+      "handle": "miss"
+    },
+    {
+      "src": "/_next/static/(?:[^/]+/pages|pages|chunks|runtime|css|image|media)/.+",
+      "status": 404,
+      "check": true,
+      "dest": "$0"
+    },
+    {
+      "handle": "rewrite"
+    },
+    {
+      "src": "^/$",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-nextjs-data"
+        }
+      ],
+      "dest": "/_next/data/FEK6Zlz44tY5CXIxUnKuG/index.json",
+      "continue": true
+    },
+    {
+      "src": "^/((?!_next/)(?:.*[^/]|.*))/?$",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-nextjs-data"
+        }
+      ],
+      "dest": "/_next/data/FEK6Zlz44tY5CXIxUnKuG/$1.json",
+      "continue": true
+    },
+    {
+      "src": "^/_next/data/FEK6Zlz44tY5CXIxUnKuG/api/auth/(?<nextauth>.+?)(?:/)?.json$",
+      "dest": "/api/auth/[...nextauth]?nextauth=$nextauth"
+    },
+    {
+      "src": "^/api/auth/(?<nextauth>.+?)(?:/)?$",
+      "dest": "/api/auth/[...nextauth]?nextauth=$nextauth"
+    },
+    {
+      "src": "^/_next/data/FEK6Zlz44tY5CXIxUnKuG/(.*).json",
+      "headers": {
+        "x-nextjs-matched-path": "/$1"
+      },
+      "continue": true,
+      "override": true
+    },
+    {
+      "src": "^/_next/data/FEK6Zlz44tY5CXIxUnKuG/(.*).json",
+      "dest": "__next_data_catchall"
+    },
+    {
+      "handle": "hit"
+    },
+    {
+      "src": "/_next/static/(?:[^/]+/pages|pages|chunks|runtime|css|image|media|FEK6Zlz44tY5CXIxUnKuG)/.+",
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
+      "continue": true,
+      "important": true
+    },
+    {
+      "src": "/index",
+      "headers": {
+        "x-matched-path": "/"
+      },
+      "continue": true,
+      "important": true
+    },
+    {
+      "src": "/((?!index$).*)",
+      "headers": {
+        "x-matched-path": "/$1"
+      },
+      "continue": true,
+      "important": true
+    },
+    {
+      "handle": "error"
+    },
+    {
+      "src": "/.*",
+      "dest": "/404",
+      "status": 404
+    },
+    {
+      "src": "/.*",
+      "dest": "/500",
+      "status": 500
+    }
+  ],
+  "images": {
+    "domains": [],
+    "sizes": [
+      640,
+      750,
+      828,
+      1080,
+      1200,
+      1920,
+      2048,
+      3840,
+      16,
+      32,
+      48,
+      64,
+      96,
+      128,
+      256,
+      384
+    ],
+    "remotePatterns": [],
+    "minimumCacheTTL": 60,
+    "formats": [
+      "image/webp"
+    ],
+    "dangerouslyAllowSVG": false,
+    "contentSecurityPolicy": "script-src 'none'; frame-src 'none'; sandbox;"
+  },
+  "overrides": {
+    "401.html": {
+      "path": "401",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "404.html": {
+      "path": "404",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "500.html": {
+      "path": "500",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "account-settings.html": {
+      "path": "account-settings",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "cards.html": {
+      "path": "cards",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "form-layouts.html": {
+      "path": "form-layouts",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "icons.html": {
+      "path": "icons",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "index.html": {
+      "path": "index",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "pages/error.html": {
+      "path": "pages/error",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "pages/login.html": {
+      "path": "pages/login",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "pages/register.html": {
+      "path": "pages/register",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "tables.html": {
+      "path": "tables",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "typography.html": {
+      "path": "typography",
+      "contentType": "text/html; charset=utf-8"
+    },
+    "__next_data_catchall.json": {
+      "path": "__next_data_catchall",
+      "contentType": "application/json"
+    }
+  },
+  "framework": {
+    "version": "12.2.5"
+  },
+  "crons": []
+}

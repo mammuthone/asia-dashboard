@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+
 export function middleware(req: NextRequest, res: NextResponse) {
   console.log('MIDDLEWARE - start');
   const loginUrl = '/pages/login/'
   const { pathname } = req.nextUrl;
   let session = req.cookies.get("session");
+
+
 
   if ([undefined, null, ''].includes(session)) {
     console.log('Session expired. Redirecting...');
