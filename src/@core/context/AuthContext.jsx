@@ -42,21 +42,15 @@ export const AuthContextProvider = ({ children }) => {
 
   const logIn = async (email, password) => {
     try {
-
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      console.log('log in... ', user);
       const idToken = await user.getIdToken();
-      console.log('idToken', idToken);
       const postOptions = {
         method: 'POST',
         body: JSON.stringify({ idToken }),
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
       }
-
-      const response = await fetch('/api/sessionLogin', postOptions);
-
+      const response = await fetch('/api/session/login', postOptions);
       return response;
-        
     }
     catch (err) {
       console.error(err)
@@ -68,7 +62,7 @@ export const AuthContextProvider = ({ children }) => {
     setUser({ email: null, uid: null });
     const response = await signOut(auth);
     console.log(JSON.stringify(response));
-    return await fetch('/api/sessionLogout');
+    return await fetch('/api/session/logout');
   };
 
   return (

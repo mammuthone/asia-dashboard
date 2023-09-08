@@ -1,6 +1,7 @@
 // ** React Imports
 import { useState, useEffect } from 'react'
 import { useAuth } from "../../../@core/context/AuthContext";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // ** Next Imports
 import Link from 'next/link'
@@ -61,7 +62,31 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   }
 }))
 
-const LoginPage = () => {
+
+export function getServerSideProps(context) {
+  console.log("GET SERVER SIDE PROPS")
+  const auth = getAuth();
+  auth.onAuthStateChanged((user) => {
+    console.log(user)
+    if (user) {
+      // Utente già autenticato, reindirizza alla dashboard
+      var uid = user.uid;
+      if (uid) {
+
+        const { res } = context;
+        res.setHeader("location", "/");
+        res.statusCode = 302;
+        res.end();
+        return;
+      }
+    }
+  });
+  return {
+    props: {},
+  };
+}
+
+const LoginPage = (props) => {
   // ** State
   const [values, setValues] = useState({
     email: '',

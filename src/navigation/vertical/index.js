@@ -70,6 +70,11 @@ const navigation = () => {
       icon: CubeOutline,
       title: 'Form Layouts',
       path: '/form-layouts'
+    },
+    {
+      icon: CubeOutline,
+      title: 'Editor news',
+      path: '/editor-news'
     }
   ]
 }
